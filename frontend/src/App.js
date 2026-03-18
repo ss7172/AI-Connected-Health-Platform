@@ -7,6 +7,7 @@ import PatientList from './components/patients/PatientList';
 import PatientForm from './components/patients/PatientForm';
 import PatientProfile from './components/patients/PatientProfile';
 import TodaySchedule from './components/appointments/TodaySchedule';
+import BookAppointment from './components/appointments/BookAppointment';
 
 function RoleBasedRedirect() {
   const { user } = useAuth();
@@ -20,6 +21,14 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          <Route
+            path="/appointments/book"
+          element={
+            <ProtectedRoute roles={['admin', 'front_desk']}>
+              <BookAppointment />
+            </ProtectedRoute>
+          }
+          />
           <Route
             path="/patients/:id"
             element={
