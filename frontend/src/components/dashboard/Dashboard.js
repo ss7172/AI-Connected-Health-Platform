@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../api/client';
 import Navbar from '../common/Navbar';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default function Dashboard() {
   const [summary, setSummary] = useState(null);
@@ -101,27 +102,30 @@ export default function Dashboard() {
 
         {/* Revenue Summary */}
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>Revenue — Last 30 Days</h2>
-          <div style={styles.revenueCards}>
+        <h2 style={styles.sectionTitle}>Revenue — Last 30 Days</h2>
+        <div style={styles.revenueCards}>
             <div style={styles.revenueCard}>
-              <p style={styles.revenueLabel}>Total</p>
-              <p style={styles.revenueValue}>
+            <p style={styles.revenueLabel}>Total</p>
+            <p style={styles.revenueValue}>
                 ₹{revenue.summary.total.toLocaleString('en-IN')}
-              </p>
+            </p>
             </div>
             <div style={styles.revenueCard}>
-              <p style={styles.revenueLabel}>Consultation</p>
-              <p style={{ ...styles.revenueValue, color: '#3182ce' }}>
+            <p style={styles.revenueLabel}>Consultation</p>
+            <p style={{ ...styles.revenueValue, color: '#3182ce' }}>
                 ₹{revenue.summary.consultation.toLocaleString('en-IN')}
-              </p>
+            </p>
             </div>
             <div style={styles.revenueCard}>
-              <p style={styles.revenueLabel}>Tests & Procedures</p>
-              <p style={{ ...styles.revenueValue, color: '#38a169' }}>
+            <p style={styles.revenueLabel}>Tests & Procedures</p>
+            <p style={{ ...styles.revenueValue, color: '#38a169' }}>
                 ₹{revenue.summary.tests_and_procedures.toLocaleString('en-IN')}
-              </p>
+            </p>
             </div>
-          </div>
+        </div>
+        <div style={{ marginTop: '1.5rem' }}>
+            <RevenueChart data={revenue.data} />
+        </div>
         </div>
 
         {/* Department Stats */}
@@ -168,6 +172,63 @@ function StatCard({ label, value, sub, color }) {
   );
 }
 
+function RevenueChart({ data }) {
+  const chartData = data.map(d => ({
+    date: d.date.slice(5), // Show MM-DD only
+    Consultation: d.consultation,
+    'Tests & Procedures': d.test + d.procedure,
+  }));
+
+  return (
+    <ResponsiveContainer width="100%" height={250}>
+      <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+        <defs>
+          <linearGradient id="colorConsultation" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#3182ce" stopOpacity={0.3} />
+            <stop offset="95%" stopColor="#3182ce" stopOpacity={0} />
+          </linearGradient>
+          <linearGradient id="colorTests" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#38a169" stopOpacity={0.3} />
+            <stop offset="95%" stopColor="#38a169" stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <CartesianGrid strokeDasharray="3 3" stroke="#f0f4f8" />
+        <XAxis
+          dataKey="date"
+          tick={{ fontSize: 11, fill: '#718096' }}
+          tickLine={false}
+          interval={4}
+        />
+        <YAxis
+          tick={{ fontSize: 11, fill: '#718096' }}
+          tickLine={false}
+          axisLine={false}
+          tickFormatter={v => `₹${(v/1000).toFixed(0)}k`}
+        />
+        <Tooltip
+          formatter={(value) => [`₹${value.toLocaleString('en-IN')}`, '']}
+          contentStyle={{ fontSize: '0.8rem', borderRadius: '6px' }}
+        />
+        <Legend wrapperStyle={{ fontSize: '0.8rem' }} />
+        <Area
+          type="monotone"
+          dataKey="Consultation"
+          stroke="#3182ce"
+          strokeWidth={2}
+          fill="url(#colorConsultation)"
+        />
+        <Area
+          type="monotone"
+          dataKey="Tests & Procedures"
+          stroke="#38a169"
+          strokeWidth={2}
+          fill="url(#colorTests)"
+        />
+      </AreaChart>
+    </ResponsiveContainer>
+  );
+}
+
 const styles = {
   container: {
     minHeight: '100vh',
@@ -181,12 +242,6 @@ const styles = {
     justifyContent: 'center',
     minHeight: '100vh',
   },
-//   header: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     alignItems: 'flex-start',
-//     marginBottom: '2rem',
-//   },
   title: {
     fontSize: '1.5rem',
     fontWeight: '700',
@@ -198,33 +253,6 @@ const styles = {
     fontSize: '0.875rem',
     margin: 0,
   },
-//   userBar: {
-//     display: 'flex',
-//     alignItems: 'center',
-//     gap: '1rem',
-//   },
-//   userName: {
-//     fontWeight: '600',
-//     color: '#2d3748',
-//   },
-//   userRole: {
-//     backgroundColor: '#ebf8ff',
-//     color: '#2b6cb0',
-//     padding: '0.25rem 0.75rem',
-//     borderRadius: '999px',
-//     fontSize: '0.75rem',
-//     fontWeight: '600',
-//     textTransform: 'uppercase',
-//   },
-//   logoutBtn: {
-//     backgroundColor: 'transparent',
-//     border: '1px solid #e2e8f0',
-//     color: '#718096',
-//     padding: '0.4rem 1rem',
-//     borderRadius: '6px',
-//     cursor: 'pointer',
-//     fontSize: '0.875rem',
-//   },
   statsGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
