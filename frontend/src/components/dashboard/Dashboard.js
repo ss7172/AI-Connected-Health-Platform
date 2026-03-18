@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../api/client';
 import { useAuth } from '../../context/AuthContext';
+import Navbar from '../common/Navbar';
 
 export default function Dashboard() {
   const [summary, setSummary] = useState(null);
@@ -49,11 +50,13 @@ export default function Dashboard() {
   }
 
   return (
-    <div style={styles.container}>
-      {/* Header */}
-      <div style={styles.header}>
-        <div>
-          <h1 style={styles.title}>Redmond Polyclinic</h1>
+    <div style={{ minHeight: '100vh', backgroundColor: '#f7fafc', fontFamily: 'system-ui, sans-serif' }}>
+      <Navbar />
+      <div style={{ padding: '2rem' }}>
+
+        {/* Page title */}
+        <div style={{ marginBottom: '2rem' }}>
+          <h1 style={styles.title}>Dashboard</h1>
           <p style={styles.subtitle}>
             {new Date().toLocaleDateString('en-IN', {
               weekday: 'long',
@@ -63,102 +66,97 @@ export default function Dashboard() {
             })}
           </p>
         </div>
-        <div style={styles.userBar}>
-          <span style={styles.userName}>{user?.full_name}</span>
-          <span style={styles.userRole}>{user?.role}</span>
-          <button onClick={logout} style={styles.logoutBtn}>
-            Sign Out
-          </button>
+
+        {/* Today's Stats */}
+        <div style={styles.statsGrid}>
+          <StatCard
+            label="Today's Appointments"
+            value={summary.today.appointments.total}
+            sub={`${summary.today.appointments.completed} completed`}
+            color="#3182ce"
+          />
+          <StatCard
+            label="Scheduled"
+            value={summary.today.appointments.scheduled}
+            sub="waiting"
+            color="#ed8936"
+          />
+          <StatCard
+            label="Today's Revenue"
+            value={`₹${summary.today.revenue.toLocaleString('en-IN')}`}
+            sub="collected today"
+            color="#38a169"
+          />
+          <StatCard
+            label="Pending Payments"
+            value={summary.pending_payments.count}
+            sub={`₹${summary.pending_payments.amount.toLocaleString('en-IN')} outstanding`}
+            color="#e53e3e"
+          />
+          <StatCard
+            label="Total Patients"
+            value={summary.patients.total_active.toLocaleString('en-IN')}
+            sub={`${summary.patients.new_this_month} new this month`}
+            color="#805ad5"
+          />
         </div>
-      </div>
 
-      {/* Today's Stats */}
-      <div style={styles.statsGrid}>
-        <StatCard
-          label="Today's Appointments"
-          value={summary.today.appointments.total}
-          sub={`${summary.today.appointments.completed} completed`}
-          color="#3182ce"
-        />
-        <StatCard
-          label="Scheduled"
-          value={summary.today.appointments.scheduled}
-          sub="waiting"
-          color="#ed8936"
-        />
-        <StatCard
-          label="Today's Revenue"
-          value={`₹${summary.today.revenue.toLocaleString('en-IN')}`}
-          sub="collected today"
-          color="#38a169"
-        />
-        <StatCard
-          label="Pending Payments"
-          value={summary.pending_payments.count}
-          sub={`₹${summary.pending_payments.amount.toLocaleString('en-IN')} outstanding`}
-          color="#e53e3e"
-        />
-        <StatCard
-          label="Total Patients"
-          value={summary.patients.total_active.toLocaleString('en-IN')}
-          sub={`${summary.patients.new_this_month} new this month`}
-          color="#805ad5"
-        />
-      </div>
-
-      {/* Revenue Summary */}
-      <div style={styles.section}>
-        <h2 style={styles.sectionTitle}>Revenue — Last 30 Days</h2>
-        <div style={styles.revenueCards}>
-          <div style={styles.revenueCard}>
-            <p style={styles.revenueLabel}>Total</p>
-            <p style={styles.revenueValue}>
-              ₹{revenue.summary.total.toLocaleString('en-IN')}
-            </p>
-          </div>
-          <div style={styles.revenueCard}>
-            <p style={styles.revenueLabel}>Consultation</p>
-            <p style={{ ...styles.revenueValue, color: '#3182ce' }}>
-              ₹{revenue.summary.consultation.toLocaleString('en-IN')}
-            </p>
-          </div>
-          <div style={styles.revenueCard}>
-            <p style={styles.revenueLabel}>Tests & Procedures</p>
-            <p style={{ ...styles.revenueValue, color: '#38a169' }}>
-              ₹{revenue.summary.tests_and_procedures.toLocaleString('en-IN')}
-            </p>
+        {/* Revenue Summary */}
+        <div style={styles.section}>
+          <h2 style={styles.sectionTitle}>Revenue — Last 30 Days</h2>
+          <div style={styles.revenueCards}>
+            <div style={styles.revenueCard}>
+              <p style={styles.revenueLabel}>Total</p>
+              <p style={styles.revenueValue}>
+                ₹{revenue.summary.total.toLocaleString('en-IN')}
+              </p>
+            </div>
+            <div style={styles.revenueCard}>
+              <p style={styles.revenueLabel}>Consultation</p>
+              <p style={{ ...styles.revenueValue, color: '#3182ce' }}>
+                ₹{revenue.summary.consultation.toLocaleString('en-IN')}
+              </p>
+            </div>
+            <div style={styles.revenueCard}>
+              <p style={styles.revenueLabel}>Tests & Procedures</p>
+              <p style={{ ...styles.revenueValue, color: '#38a169' }}>
+                ₹{revenue.summary.tests_and_procedures.toLocaleString('en-IN')}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Department Stats */}
-      <div style={styles.section}>
-        <h2 style={styles.sectionTitle}>Department Performance — This Month</h2>
-        <table style={styles.table}>
-          <thead>
-            <tr>
-              {['Department', 'Appointments', 'Completed', 'Completion %', 'Revenue'].map(h => (
-                <th key={h} style={styles.th}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {deptStats.map(dept => (
-              <tr key={dept.department_id} style={styles.tr}>
-                <td style={styles.td}>{dept.department_name}</td>
-                <td style={styles.td}>{dept.monthly_appointments}</td>
-                <td style={styles.td}>{dept.monthly_completed}</td>
-                <td style={styles.td}>{dept.completion_rate}%</td>
-                <td style={styles.td}>
-                  ₹{dept.monthly_revenue.toLocaleString('en-IN')}
-                </td>
+        {/* Department Stats */}
+        <div style={styles.section}>
+          <h2 style={styles.sectionTitle}>Department Performance — This Month</h2>
+          <table style={styles.table}>
+            <thead>
+              <tr>
+                {['Department', 'Appointments', 'Completed', 'Completion %', 'Revenue'].map(h => (
+                  <th key={h} style={styles.th}>{h}</th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {deptStats.map(dept => (
+                <tr key={dept.department_id} style={styles.tr}>
+                  <td style={styles.td}>{dept.department_name}</td>
+                  <td style={styles.td}>{dept.monthly_appointments}</td>
+                  <td style={styles.td}>{dept.monthly_completed}</td>
+                  <td style={styles.td}>{dept.completion_rate}%</td>
+                  <td style={styles.td}>
+                    ₹{dept.monthly_revenue.toLocaleString('en-IN')}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
       </div>
     </div>
   );
+
 }
 
 function StatCard({ label, value, sub, color }) {
@@ -185,12 +183,12 @@ const styles = {
     justifyContent: 'center',
     minHeight: '100vh',
   },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: '2rem',
-  },
+//   header: {
+//     display: 'flex',
+//     justifyContent: 'space-between',
+//     alignItems: 'flex-start',
+//     marginBottom: '2rem',
+//   },
   title: {
     fontSize: '1.5rem',
     fontWeight: '700',
@@ -202,33 +200,33 @@ const styles = {
     fontSize: '0.875rem',
     margin: 0,
   },
-  userBar: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '1rem',
-  },
-  userName: {
-    fontWeight: '600',
-    color: '#2d3748',
-  },
-  userRole: {
-    backgroundColor: '#ebf8ff',
-    color: '#2b6cb0',
-    padding: '0.25rem 0.75rem',
-    borderRadius: '999px',
-    fontSize: '0.75rem',
-    fontWeight: '600',
-    textTransform: 'uppercase',
-  },
-  logoutBtn: {
-    backgroundColor: 'transparent',
-    border: '1px solid #e2e8f0',
-    color: '#718096',
-    padding: '0.4rem 1rem',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontSize: '0.875rem',
-  },
+//   userBar: {
+//     display: 'flex',
+//     alignItems: 'center',
+//     gap: '1rem',
+//   },
+//   userName: {
+//     fontWeight: '600',
+//     color: '#2d3748',
+//   },
+//   userRole: {
+//     backgroundColor: '#ebf8ff',
+//     color: '#2b6cb0',
+//     padding: '0.25rem 0.75rem',
+//     borderRadius: '999px',
+//     fontSize: '0.75rem',
+//     fontWeight: '600',
+//     textTransform: 'uppercase',
+//   },
+//   logoutBtn: {
+//     backgroundColor: 'transparent',
+//     border: '1px solid #e2e8f0',
+//     color: '#718096',
+//     padding: '0.4rem 1rem',
+//     borderRadius: '6px',
+//     cursor: 'pointer',
+//     fontSize: '0.875rem',
+//   },
   statsGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
