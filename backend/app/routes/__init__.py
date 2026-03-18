@@ -11,6 +11,7 @@ def register_blueprints(app: Flask) -> None:
     from app.routes.appointments import appointments_bp
     from app.routes.visits import visits_bp
     from app.routes.billing import billing_bp
+    from app.routes.documents import documents_bp
 
     app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
     app.register_blueprint(patients_bp, url_prefix='/api/v1/patients')
@@ -19,3 +20,4 @@ def register_blueprints(app: Flask) -> None:
     app.register_blueprint(appointments_bp, url_prefix='/api/v1/appointments')
     app.register_blueprint(visits_bp, url_prefix='/api/v1/visits')
     app.register_blueprint(billing_bp, url_prefix='/api/v1/billing')
+    app.register_blueprint(documents_bp, url_prefix='/api/v1/documents')
