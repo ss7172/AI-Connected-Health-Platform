@@ -55,6 +55,8 @@ export default function LoginPage() {
             />
           </div>
 
+
+
           <div style={styles.field}>
             <label style={styles.label}>Password</label>
             <input
@@ -78,6 +80,25 @@ export default function LoginPage() {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
+
+                  {/* Demo credentials */}
+            <div style={styles.demoBox}>
+            <p style={styles.demoTitle}>Demo Credentials</p>
+            <div style={styles.demoGrid}>
+                <div>
+                <p style={styles.demoRole}>Admin</p>
+                <p style={styles.demoCred}>admin / admin123</p>
+                </div>
+                <div>
+                <p style={styles.demoRole}>Doctor</p>
+                <p style={styles.demoCred}>dr.mohanty / doctor123</p>
+                </div>
+                <div>
+                <p style={styles.demoRole}>Front Desk</p>
+                <p style={styles.demoCred}>frontdesk1 / front123</p>
+                </div>
+            </div>
+            </div>
       </div>
     </div>
   );
@@ -157,4 +178,36 @@ const styles = {
     cursor: 'pointer',
     marginTop: '0.5rem',
   },
+  demoBox: {
+  marginTop: '1.5rem',
+  backgroundColor: '#f7fafc',
+  border: '1px solid #e2e8f0',
+  borderRadius: '8px',
+  padding: '1rem',
+},
+demoTitle: {
+  fontSize: '0.75rem',
+  fontWeight: '700',
+  color: '#718096',
+  textTransform: 'uppercase',
+  letterSpacing: '0.05em',
+  margin: '0 0 0.75rem',
+},
+demoGrid: {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(3, 1fr)',
+  gap: '0.5rem',
+},
+demoRole: {
+  fontSize: '0.75rem',
+  fontWeight: '700',
+  color: '#4a5568',
+  margin: '0 0 0.2rem',
+},
+demoCred: {
+  fontSize: '0.8rem',
+  color: '#718096',
+  fontFamily: 'monospace',
+  margin: 0,
+},
 };
