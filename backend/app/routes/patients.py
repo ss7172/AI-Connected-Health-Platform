@@ -24,6 +24,9 @@ def get_patients():
     return success_response(result, 200)
 
 
+# IMPORTANT: This route must remain ABOVE /<int:patient_id>
+# Flask matches routes top-down. If /<int:patient_id> is defined first,
+# 'check-phone' gets swallowed as a patient ID lookup and returns 404.
 @patients_bp.route('/check-phone/<string:phone>', methods=['GET'])
 @jwt_required()
 @role_required(['front_desk', 'admin'])

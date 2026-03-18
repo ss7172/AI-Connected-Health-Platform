@@ -7,11 +7,12 @@ sys.path.insert(0, os.path.dirname(__file__))
 from app import create_app
 from app.extensions import db
 
-from datetime import date, time
 from app.models import (
     User, Department, Doctor, Patient,
     Appointment, Visit, BillingRecord, BillingItem, PatientDocument
 )
+from datetime import date, time
+from decimal import Decimal
 
 
 def seed_departments() -> dict:
@@ -167,6 +168,59 @@ def seed_appointments(patients: dict, doctors: list, departments: dict) -> list:
     return appointments
 
 
+def seed_visits(appointments: list, departments: dict) -> None:
+    """Create a visit and billing record for Ramesh's completed appointment."""
+    completed_appointment = appointments[0]  # Ramesh, Cardiology, status=completed
+    cardiology = departments['Cardiology']
+
+    visit = Visit(
+        appointment_id=completed_appointment.id,
+        patient_id=completed_appointment.patient_id,
+        doctor_id=completed_appointment.doctor_id,
+        symptoms="Chest pain and shortness of breath",
+        diagnosis="Stable angina — recommend stress test and medication adjustment",
+        diagnosis_code="I20.9",
+        prescription="Tab. Metoprolol 25mg BD, Tab. Aspirin 75mg OD",
+        follow_up_notes="Review after stress test results",
+        follow_up_date=date.today().replace(day=date.today().day + 14)
+        if date.today().day <= 14
+        else date.today(),
+    )
+    db.session.add(visit)
+    db.session.flush()
+
+    billing_record = BillingRecord(
+        visit_id=visit.id,
+        patient_id=completed_appointment.patient_id,
+        total_amount=Decimal('700.00'),
+        status='paid',
+        payment_method='cash',
+        payment_date=date.today(),
+    )
+    db.session.add(billing_record)
+    db.session.flush()
+
+    # Consultation fee line item
+    consultation_item = BillingItem(
+        billing_record_id=billing_record.id,
+        description='Cardiology Consultation',
+        category='consultation',
+        amount=Decimal('500.00'),
+    )
+
+    # Additional test line item
+    ecg_item = BillingItem(
+        billing_record_id=billing_record.id,
+        description='ECG',
+        category='test',
+        amount=Decimal('200.00'),
+    )
+
+    db.session.add(consultation_item)
+    db.session.add(ecg_item)
+    print(f"  Created visit + billing record for Ramesh Nayak (paid ₹700)")
+
+
 def run_seed() -> None:
     """Main seed function. Clears existing data and reseeds."""
     app = create_app('development')
@@ -206,6 +260,11 @@ def run_seed() -> None:
 
         print("\nSeeding appointments...")
         seed_appointments(patients, doctors, departments)
+
+        print("\nSeeding visits and billing...")
+        appointments = Appointment.query.all()
+        seed_visits(appointments, departments)
+
 
         db.session.commit()
         print("\nSeed complete.")
