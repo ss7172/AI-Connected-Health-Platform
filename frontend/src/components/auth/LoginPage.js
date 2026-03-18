@@ -16,16 +16,19 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
 
-    try {
-      const user = await login(email, password);
-      // Redirect based on role
+  try {
+    const user = await login(email, password);
+    if (user.role === 'admin') {
       navigate('/dashboard');
-    } catch (err) {
-      setError(err.error || 'Login failed. Please try again.');
-    } finally {
-      setLoading(false);
+    } else {
+      navigate('/appointments/today');
     }
-  };
+  } catch (err) {
+    setError(err.error || 'Login failed. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div style={styles.container}>
