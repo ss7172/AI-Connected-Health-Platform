@@ -1,6 +1,6 @@
-# Redmond Polyclinic — Patient Management System
+# Patient Management System
 
-A full-stack internal clinic management system built for Redmond Polyclinic and Diagnostic, a multi-specialty clinic in Cuttack, India. Handles patient registration, appointment scheduling, clinical documentation, billing, and an admin dashboard.
+A full-stack internal clinic management system. Handles patient registration, appointment scheduling, clinical documentation, billing, and an admin dashboard.
 
 **Live Demo:** https://redmond-pms-frontend.onrender.com
 
