@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, app
 from app.config import config
 from app.extensions import db, migrate, jwt, cors
 
@@ -35,4 +35,13 @@ def create_app(config_name: str = 'development') -> Flask:
     from app.routes import register_blueprints
     register_blueprints(app)
 
+    # Start pipeline scheduler in production
+    if config_name == 'production':
+        try:
+            from pipeline.scheduler import start_scheduler
+            start_scheduler()
+        except Exception as e:
+            app.logger.warning(f"Scheduler failed to start: {e}")
+
     return app
+
