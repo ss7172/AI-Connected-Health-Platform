@@ -16,8 +16,10 @@ from datetime import datetime
 def get_jobs() -> dict:
     """Registry of all available jobs."""
     from pipeline.jobs.revenue_analytics import RevenueAnalyticsJob
+    from pipeline.jobs.operational_metrics import OperationalMetricsJob
     return {
         'revenue_analytics': RevenueAnalyticsJob,
+        'operational_metrics': OperationalMetricsJob,
     }
 
 
