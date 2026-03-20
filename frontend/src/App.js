@@ -11,6 +11,7 @@ import BookAppointment from './components/appointments/BookAppointment';
 import VisitForm from './components/visits/VisitForm';
 import BillingList from './components/billing/BillingList';
 import InvoiceDetail from './components/billing/InvoiceDetail';
+import PipelineStatus from './components/pipeline/PipelineStatus';
 
   
 
@@ -109,6 +110,14 @@ export default function App() {
             element={
               <ProtectedRoute roles={['admin', 'front_desk']}>
                 <InvoiceDetail />
+              </ProtectedRoute>
+            }
+            />
+          <Route
+            path="/pipeline"
+            element={
+              <ProtectedRoute roles={['admin']}>
+                <PipelineStatus />
               </ProtectedRoute>
             }
           />
