@@ -381,7 +381,6 @@ pms/
 
 | Decision | Choice | Why |
 |----------|--------|-----|
-| Consultation fee on Department | Not per-doctor | Indian polyclinics charge by department. |
 | Phone as patient dedup key | Not email | Tier 2 Indian city patients reliably have mobile numbers. Email is optional. |
 | Auto-billing on visit creation | Single transaction | Visit + appointment status + billing record + consultation fee item — all commit or all rollback. |
 | pgvector over ChromaDB | Same PostgreSQL | Render ephemeral filesystem kills ChromaDB on restart. pgvector persists. |
