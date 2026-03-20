@@ -2,9 +2,8 @@
 
 A 3-layer clinical platform: Patient Management System → Data Pipeline → AI Assistant. One codebase, one database, one deployment.
 
-**Live Demo:** 
-**Live Demo URL will be updated shortly
-**
+**Live Demo:**  **https://pms-frontend-7a1q.onrender.com/login**
+
 > ⚠️ Hosted on Render free tier — first load may take ~50 seconds to spin up.
 
 ---
