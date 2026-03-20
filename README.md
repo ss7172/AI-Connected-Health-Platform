@@ -1,4 +1,4 @@
-# Connected Health Platform
+# Connected Health - a Clinical RAG Platform
 
 A 3-layer clinical platform: Patient Management System → Data Pipeline → AI Assistant. One codebase, one database, one deployment.
 
