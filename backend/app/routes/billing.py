@@ -11,24 +11,24 @@ from app.utils.helpers import error_response, success_response
 billing_bp = Blueprint('billing', __name__)
 
 
-@billing_bp.route('', methods=['GET'])
-@jwt_required()
-@role_required(['front_desk', 'admin'])
-def get_billing_records():
-    """
-    Get filtered list of billing records.
-    GET /api/v1/billing?status=&date_from=&date_to=
-    front_desk, admin only.
-    """
-    try:
-        records = BillingService.get_billing_records(
-            status=request.args.get('status'),
-            date_from=request.args.get('date_from'),
-            date_to=request.args.get('date_to'),
-        )
-        return success_response({'billing_records': records}, 200)
-    except ValueError as e:
-        return error_response(str(e), 400)
+# @billing_bp.route('', methods=['GET'])
+# @jwt_required()
+# @role_required(['front_desk', 'admin'])
+# def get_billing_records():
+#     """
+#     Get filtered list of billing records.
+#     GET /api/v1/billing?status=&date_from=&date_to=
+#     front_desk, admin only.
+#     """
+#     try:
+#         records = BillingService.get_billing_records(
+#             status=request.args.get('status'),
+#             date_from=request.args.get('date_from'),
+#             date_to=request.args.get('date_to'),
+#         )
+#         return success_response({'billing_records': records}, 200)
+#     except ValueError as e:
+#         return error_response(str(e), 400)
 
 
 @billing_bp.route('', methods=['GET'])
