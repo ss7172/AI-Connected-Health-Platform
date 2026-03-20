@@ -393,6 +393,6 @@ pms/
 
 ## Built By
 
-Satyabrat Srikumar — Columbia University MS in Computer Science
+Satyabrat Srikumar & Arth Singh — Columbia University MS in Computer Science
 
 Built as a portfolio project demonstrating technical product management and full-stack AI engineering.
