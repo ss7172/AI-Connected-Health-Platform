@@ -2,9 +2,9 @@
 
 A 3-layer clinical platform: Patient Management System → Data Pipeline → AI Assistant. One codebase, one database, one deployment.
 
-**Live Demo:** [https://redmond-pms-frontend.onrender.com](https://redmond-pms-frontend.onrender.com)
-Live Demo will be updated shortly
-
+**Live Demo:** 
+**Live Demo URL will be updated shortly
+**
 > ⚠️ Hosted on Render free tier — first load may take ~50 seconds to spin up.
 
 ---
