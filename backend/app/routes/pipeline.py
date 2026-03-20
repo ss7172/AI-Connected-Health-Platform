@@ -62,5 +62,7 @@ def pipeline_status():
             row['started_at'] = row['started_at'].isoformat()
         if row['completed_at']:
             row['completed_at'] = row['completed_at'].isoformat()
+        if row['duration_seconds'] is not None:
+            row['duration_seconds'] = float(row['duration_seconds'])
 
     return success_response({'jobs': rows}, 200)
