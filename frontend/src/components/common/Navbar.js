@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { path: '/appointments/book', label: 'Book Appointment', roles: ['admin', 'front_desk'] },
   { path: '/billing', label: 'Billing', roles: ['admin', 'front_desk'] },
   { path: '/pipeline', label: 'Pipeline', roles: ['admin'] },
+  { path: '/assistant', label: 'AI Assistant', roles: ['admin', 'doctor'] },
 ];
 
 export default function Navbar() {

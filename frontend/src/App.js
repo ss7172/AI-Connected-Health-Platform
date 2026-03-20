@@ -12,6 +12,7 @@ import VisitForm from './components/visits/VisitForm';
 import BillingList from './components/billing/BillingList';
 import InvoiceDetail from './components/billing/InvoiceDetail';
 import PipelineStatus from './components/pipeline/PipelineStatus';
+import ChatAssistant from './components/assistant/ChatAssistant';
 
   
 
@@ -118,6 +119,14 @@ export default function App() {
             element={
               <ProtectedRoute roles={['admin']}>
                 <PipelineStatus />
+              </ProtectedRoute>
+            }
+          />
+            <Route
+            path="/assistant"
+            element={
+              <ProtectedRoute roles={['admin','doctor']}>
+                <ChatAssistant />
               </ProtectedRoute>
             }
           />

@@ -14,6 +14,7 @@ def register_blueprints(app: Flask) -> None:
     from app.routes.documents import documents_bp
     from app.routes.dashboard import dashboard_bp
     from app.routes.pipeline import pipeline_bp
+    from app.routes.assistant import assistant_bp
     
     app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
     app.register_blueprint(patients_bp, url_prefix='/api/v1/patients')
@@ -25,3 +26,5 @@ def register_blueprints(app: Flask) -> None:
     app.register_blueprint(documents_bp, url_prefix='/api/v1/documents')
     app.register_blueprint(dashboard_bp, url_prefix='/api/v1/dashboard')
     app.register_blueprint(pipeline_bp, url_prefix='/api/v1/pipeline')
+    app.register_blueprint(assistant_bp, url_prefix='/api/v1/assistant')
+
